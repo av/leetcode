@@ -1,26 +1,31 @@
 function addTwoNumbers(
   l1: ListNode | null,
   l2: ListNode | null,
-  carry?: boolean
-): ListNode {
+  carry = 0
+): ListNode | null {
   if (l1 || l2) {
-    const val1 = l1?.val ?? 0;
-    const val2 = l2?.val ?? 0;
-    const next1 = l1?.next ?? null;
-    const next2 = l2?.next ?? null;
-    const sum = val1 + val2 + (carry ? 1 : 0);
-
-    console.log("ADD:", l1, l2, carry, sum);
+    const next1 = getNextNode(l1);
+    const next2 = getNextNode(l2);
+    const sum = getNodeValue(l1) + getNodeValue(l2) + carry;
+    const nextCarry = sum >= 10 ? 1 : 0;
 
     return new ListNode(
       sum % 10,
-      next1 || next2 ? addTwoNumbers(next1, next2, sum >= 10) : sum >= 10 ? new ListNode(1) : null
+      addTwoNumbers(next1, next2, nextCarry)
     );
   } else if (carry) {
     return new ListNode(1);
   }
 
-  return new ListNode(0);
+  return null;
+}
+
+function getNodeValue(node: ListNode | null): number {
+  return node && node.val ? node.val : 0;
+}
+
+function getNextNode(node: ListNode | null): ListNode | null {
+  return node && node.next ? node.next : null;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -66,18 +71,18 @@ function traverse(node: ListNode) {
 }
 
 function add(a: number, b: number): number {
-  return traverse(addTwoNumbers(construct(a), construct(b)));
+  return traverse(addTwoNumbers(construct(a), construct(b))!);
 }
 
-function addRaw(a: number, b: number): ListNode {
+function addRaw(a: number, b: number): ListNode | null {
   return addTwoNumbers(construct(a), construct(b));
 }
 
-console.log(traverse(construct(123)));
-console.log(add(20, 20));
-console.log(add(120, 20));
-console.log(add(20, 180));
+// console.log(traverse(construct(123)));
+// console.log(add(20, 20));
+// console.log(add(120, 20));
+// console.log(add(20, 180));
 console.log(addRaw(342, 465));
 console.log(add(5, 5));
-console.log(construct(120));
-console.log(construct(20));
+// console.log(construct(120));
+// console.log(construct(20));
