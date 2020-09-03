@@ -1,3 +1,7 @@
+import { ListNode } from "./utils";
+
+//////////////////////////////////////////////////////////////////////
+
 function addTwoNumbers(
   l1: ListNode | null,
   l2: ListNode | null,
@@ -9,10 +13,7 @@ function addTwoNumbers(
     const sum = getNodeValue(l1) + getNodeValue(l2) + carry;
     const nextCarry = sum >= 10 ? 1 : 0;
 
-    return new ListNode(
-      sum % 10,
-      addTwoNumbers(next1, next2, nextCarry)
-    );
+    return new ListNode(sum % 10, addTwoNumbers(next1, next2, nextCarry));
   } else if (carry) {
     return new ListNode(1);
   }
@@ -30,52 +31,14 @@ function getNextNode(node: ListNode | null): ListNode | null {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-class ListNode {
-  val: number;
-  next: ListNode | null;
-
-  constructor(val?: number, next?: ListNode | null) {
-    this.val = val === undefined ? 0 : val;
-    this.next = next === undefined ? null : next;
-  }
-}
-
-function construct(num: number): ListNode {
-  const nums = num
-    .toString()
-    .split("")
-    .map((n) => parseInt(n));
-  let node: ListNode | null = null;
-
-  nums.forEach((num) => {
-    if (node) {
-      node = new ListNode(num, node);
-    } else {
-      node = new ListNode(num);
-    }
-  });
-
-  return node!;
-}
-
-function traverse(node: ListNode) {
-  const num: number[] = [];
-  let currentNode: ListNode | null = node;
-
-  do {
-    num.push(currentNode.val);
-    currentNode = currentNode.next;
-  } while (currentNode);
-
-  return parseInt(num.reverse().join(""));
-}
-
 function add(a: number, b: number): number {
-  return traverse(addTwoNumbers(construct(a), construct(b))!);
+  return ListNode.traverseNumber(
+    addTwoNumbers(ListNode.fromNumber(a), ListNode.fromNumber(b))!
+  );
 }
 
 function addRaw(a: number, b: number): ListNode | null {
-  return addTwoNumbers(construct(a), construct(b));
+  return addTwoNumbers(ListNode.fromNumber(a), ListNode.fromNumber(b));
 }
 
 // console.log(traverse(construct(123)));
