@@ -1,0 +1,14 @@
+{
+  "name": "ltc-challenges",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:av/leetcode.git",
+  "author": "<mail@av.codes>",
+  "license": "MIT",
+  "scripts": {
+    "t": "jest --watch"
+  },
+  "devDependencies": {
+    "jest": "^26.4.2"
+  }
+}
