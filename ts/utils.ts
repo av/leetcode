@@ -2,6 +2,7 @@ export class ListNode {
   static fromArray(nums: number[]): ListNode | null {
     let tail = null;
     let head = null;
+    nums = [...nums];
 
     while (nums.length) {
       const next = new ListNode(nums.shift());
