@@ -1,39 +1,59 @@
+type Point = [number, number];
+
 function maxDistance(grid: number[][]): number {
+  let max = -1;
+  const lands: Point[] = [];
   const size = grid[0].length;
-  const output: number[] = [];
-  const set = (row: number, col: number, val: number) => {
-    output[size * row + col] = val;
-  };
-  const get = (row: number, col: number) => {
-    return output[size * row + col] || 0;
-  };
 
-  for (const [rowIndex, row] of grid.entries()) {
-    for (const [colIndex, isLand] of row.entries()) {
-      if (isLand) {
-        set(rowIndex, colIndex, 0);
-      } else {
-        const min = Math.min(
-          get(rowIndex - 1, colIndex),
-          get(rowIndex, colIndex + 1),
-          get(rowIndex + 1, colIndex),
-          get(rowIndex, colIndex - 1)
-        );
-
-        set(rowIndex, colIndex, min + 1);
+  for (let row = 0; row < size; row++) {
+    for (let col = 0; col < size; col++) {
+      if (grid[row][col]) {
+        lands.push([row, col]);
       }
     }
   }
 
-  return Math.max(...output);
+  if (lands.length === 0) return max;
+
+  for (let row = 0; row < size; row++) {
+    for (let col = 0; col < size; col++) {
+      if (grid[row][col] === 0) {
+        const nearest = nearestLand(lands, [row, col]);
+
+        if (nearest > max) {
+          max = nearest;
+        }
+      }
+    }
+  }
+
+  return max;
+}
+
+function nearestLand(lands: Point[], point: Point) {
+  let nearest = Number.MAX_VALUE;
+
+  for (const land of lands) {
+    const dist = distance(land, point);
+
+    if (dist < nearest) {
+      nearest = dist;
+    }
+  }
+
+  return nearest;
+}
+
+function distance(a: Point, b: Point) {
+  return Math.abs(b[0] - a[0]) + Math.abs(b[1] - a[1]);
 }
 
 //////////////////////////////////////////////////////////////////////
 
 [
   [
-    [1, 0, 0],
-    [0, 0, 0],
+    [1, 0, 1],
+    [0, 0, 1],
     [0, 0, 0],
   ],
 ].forEach((grid) => {
